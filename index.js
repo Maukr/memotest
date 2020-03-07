@@ -3,6 +3,8 @@ let arrayColores = ['blue', 'blue', 'red', 'red', 'yellow', 'yellow', 'green', '
 function prepararJuego(){
     let $cuadros = document.querySelectorAll(".cuadro");
     setearColores($cuadros);
+    mostrarColores($cuadros);
+
 }
 
 function setearColores($cuadros){
@@ -18,4 +20,20 @@ function posicionAleatoria(max){
     return Math.floor((Math.random() * max));
 }
 
+function mostrarColores($cuadros){
+
+    setTimeout(function(){
+        $cuadros.forEach(element => {
+            element.style.opacity = "1";
+        }); 
+    }, 500);
+
+    setTimeout(function(){
+        $cuadros.forEach(element => {
+            element.style.opacity = "0";
+        }); 
+    }, 2000);
+}
+
 prepararJuego();
+
