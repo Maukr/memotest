@@ -8,5 +8,6 @@
 }
 .cuadro{
     cursor: pointer;
+    opacity: 0;
 }
 
