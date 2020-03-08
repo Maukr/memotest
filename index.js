@@ -1,4 +1,8 @@
-let arrayColores = ['blue', 'blue', 'red', 'red', 'yellow', 'yellow', 'green', 'green', 'purple', 'purple', 'orange', 'orange'];
+let $cuadros = document.querySelectorAll(".cuadro");
+let $tablero = document.querySelector("#tablero");
+let $primerCuadro = null;
+let turnos = 0;
+let $mensajeFinal = document.querySelector("#fin-juego");
 
 function prepararJuego(){
     let $cuadros = document.querySelectorAll(".cuadro");
@@ -8,20 +12,17 @@ function prepararJuego(){
 
 }
 
-function setearColores($cuadros){
-    while(arrayColores.length > 0){
-        let pos = posicionAleatoria(arrayColores.length);
-        let color = arrayColores[pos];
-        arrayColores.splice(pos, 1);
-        $cuadros[arrayColores.length].style.backgroundColor = color;
-    }
+function setearColores(coloresRepetidos){
+    const coloresRandom = coloresRepetidos.sort(function(){
+        return 0.5 - Math.random();
+    });
+
+    coloresRepetidos.forEach(function(element, i){
+        $cuadros[i].style.backgroundColor = element;
+    });
 }
 
-function posicionAleatoria(max){
-    return Math.floor((Math.random() * max));
-}
-
-function mostrarColores($cuadros){
+function mostrarColores(){
 
     setTimeout(function(){
         $cuadros.forEach(element => {
