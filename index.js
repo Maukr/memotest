@@ -5,11 +5,13 @@ let turnos = 0;
 let $mensajeFinal = document.querySelector("#fin-juego");
 
 function prepararJuego(){
-    let $cuadros = document.querySelectorAll(".cuadro");
-    setearColores($cuadros);
-    bloquearInputUsuario($cuadros);
-    mostrarColores($cuadros);
-
+    let arrayColores = ['blue','red','yellow','green','purple','orange'];
+    let coloresRepetidos = arrayColores.concat(arrayColores);
+    setearColores(coloresRepetidos);
+    mostrarColores();
+    setTimeout(function(){
+        manejarEvento($tablero);
+    },2500);
 }
 
 function setearColores(coloresRepetidos){
@@ -37,10 +39,68 @@ function mostrarColores(){
     }, 2000);
 }
 
-function bloquearInputUsuario($cuadros){
-    $cuadros.forEach(element => {
-        element.onclick = function(){};
-    });
+
+function manejarEvento($tablero){
+
+    $tablero.onclick = function(e){
+        const $elemento = e.target;
+        if($elemento.classList.contains('cuadro')){ //Para saber si se le hizo click a un cuadro
+            manejarClickCuadro($elemento);
+        }
+    };
+}
+
+function manejarClickCuadro($cuadroActual){
+    mostrarCuadro($cuadroActual);
+
+    if($primerCuadro === null){
+        $primerCuadro = $cuadroActual;
+    }else{
+        if($primerCuadro === $cuadroActual){
+            return; //si son literalmente el mismo cuadro sale (compara cuadros no colores)
+        }
+        turnos++;
+
+        if(cuadrosSonIguales($primerCuadro, $cuadroActual)){
+            eliminarCuadro($primerCuadro);
+            eliminarCuadro($cuadroActual);
+        }else{
+            ocultarCuadro($primerCuadro);
+            ocultarCuadro($cuadroActual);
+        }
+        $primerCuadro = null;
+    }
+}
+
+function ocultarCuadro($cuadroActual){
+    setTimeout(function(){
+        $cuadroActual.style.opacity = "0";
+    },500)
+    
+}
+function mostrarCuadro($cuadroActual){
+    $cuadroActual.style.opacity = "1";
+}
+
+function cuadrosSonIguales($primerCuadro, $cuadroActual){
+    return $primerCuadro.style.backgroundColor === $cuadroActual.style.backgroundColor;
+}
+
+function eliminarCuadro($cuadroEliminar){
+    setTimeout(function(){
+        $cuadroEliminar.parentElement.classList.add('completo');
+        $cuadroEliminar.remove();
+        evaluarFinal();
+    },500);
+    
+}
+
+function evaluarFinal(){
+    if(document.querySelectorAll('.cuadro').length === 0){
+        $tablero.style.display = "none";
+        $mensajeFinal.querySelector('strong').textContent = turnos.toString();
+        $mensajeFinal.style.display = 'block';
+    }
 }
 
 prepararJuego();
